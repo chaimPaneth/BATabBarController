@@ -50,21 +50,33 @@ static NSInteger const BAUniqueTag = 57690;
     return self;
 }
 
+- (bool)hasBottomSafeAreaInsets {
+    if (@available(iOS 11.0, *)) {
+        // with home indicator: 34.0 on iPhone X, XS, XS Max, XR.
+        // with home indicator: 20.0 on iPad Pro 12.9" 3rd generation.
+        
+        return [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom || 0 > 0;
+    }
+    
+    return false;
+}
+
 - (void)updateConstraints {
     
     //tab bar constraints
-    //need to check if we're on an iphone X, but has to be manual to be compatible with <iOS11
-    bool isiPhoneX = NO;
+    //need to check if we're on an iphone X, XR, XS but has to be manual to be compatible with <iOS11
+    bool needsMoreHeight = NO;
     
-    //there's no great way to check if it's an iPhone X
-    if([[UIDevice currentDevice]userInterfaceIdiom]==UIUserInterfaceIdiomPhone && (int)[[UIScreen mainScreen] nativeBounds].size.height == 2436) {
-        isiPhoneX = YES;
+    //there's no great way to check if it's an iPhone X, XR, XS
+    if([self hasBottomSafeAreaInsets] == true) {
+        needsMoreHeight = YES;
     }
+    
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.superview.mas_bottom);
         make.leading.equalTo(self.superview.mas_leading);
         make.trailing.equalTo(self.superview.mas_trailing);
-        isiPhoneX ? make.height.equalTo(@83) : make.height.equalTo(@49);//toolbar with safe area inset vs toolbar without safe are inset
+        needsMoreHeight ? make.height.equalTo(@83) : make.height.equalTo(@49);//toolbar with safe area inset vs toolbar without safe are inset
     }];
     
     [self.toolBarContainer mas_updateConstraints:^(MASConstraintMaker *make) {
