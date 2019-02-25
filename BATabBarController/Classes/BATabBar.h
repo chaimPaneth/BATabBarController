@@ -80,5 +80,13 @@
  Location of the Tab selected
  */
 - (void)tabBar:(BATabBar*)tabBar didSelectItemAtIndex:(NSUInteger)index;
+    
+    
+/**
+ Method to determine if tab bar needs more height above home indicator in iPhone's X & up
+
+ @return bool if has home indicator
+ */
+- (bool)hasBottomSafeAreaInsets;
 
 @end
