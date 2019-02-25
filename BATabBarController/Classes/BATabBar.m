@@ -50,17 +50,6 @@ static NSInteger const BAUniqueTag = 57690;
     return self;
 }
 
-- (bool)hasBottomSafeAreaInsets {
-    if (@available(iOS 11.0, *)) {
-        // with home indicator: 34.0 on iPhone X, XS, XS Max, XR.
-        // with home indicator: 20.0 on iPad Pro 12.9" 3rd generation.
-        
-        return [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom || 0 > 0;
-    }
-    
-    return false;
-}
-
 - (void)updateConstraints {
     
     //tab bar constraints
@@ -125,6 +114,17 @@ static NSInteger const BAUniqueTag = 57690;
     BATabBarItem* newItem = [self.tabBarItems objectAtIndex:index];
     [self transitionToItem:newItem animated:animated];
     
+}
+    
+- (bool)hasBottomSafeAreaInsets {
+    if (@available(iOS 11.0, *)) {
+        // with home indicator: 34.0 on iPhone X, XS, XS Max, XR.
+        // with home indicator: 20.0 on iPad Pro 12.9" 3rd generation.
+        
+        return [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom || 0 > 0;
+    }
+    
+    return false;
 }
 
 #pragma mark - IBActions
